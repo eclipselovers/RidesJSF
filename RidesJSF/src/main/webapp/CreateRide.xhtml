@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+<h:head><title>Create Ride</title></h:head>
+<h:body>
+<h:form>
+<h2>Create Ride</h2>
+
+<tr>
+<td>Origin: </td>
+<h:inputText id="origin" value="#{createRideBean.origin}"></h:inputText>
+</tr>
+
+<tr>
+<td>Destination: </td>
+<h:inputText id="destination" value="#{createRideBean.destination}"></h:inputText>
+</tr>
+
+<tr>
+<td>Date: </td>
+<h:inputText id="date" value="#{createRideBean.date}"></h:inputText>
+</tr>
+
+<tr>
+<td>Seats: </td>
+<h:inputText id="seats" value="#{createRideBean.seats}"></h:inputText>
+</tr>
+
+<tr>
+<td>Price: </td>
+<h:inputText id="price" value="#{createRideBean.price}"></h:inputText>
+</tr>
+
+<tr>
+<td>Mail: </td>
+<h:inputText id="mail" value="#{createRideBean.mail}"></h:inputText>
+</tr>
+
+<p>
+<h:commandButton value="Create" action="#{login.create}" />
+</p>
+
+</h:form>
+</h:body>
+</f:view>
+</html>
