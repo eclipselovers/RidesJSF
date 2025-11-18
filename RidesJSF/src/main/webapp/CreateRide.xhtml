@@ -8,38 +8,54 @@ xmlns:f="http://java.sun.com/jsf/core">
 <h:form>
 <h2>Create Ride</h2>
 
+<h:messages globalOnly="false" />
+
+<!-- Use JSF inputs; for layout a simple table -->
+<table>
 <tr>
 <td>Origin: </td>
-<h:inputText id="origin" value="#{createRideBean.origin}"></h:inputText>
+<td><h:inputText id="origin" value="#{createRideBean.origin}" required="true" /></td>
 </tr>
 
 <tr>
 <td>Destination: </td>
-<h:inputText id="destination" value="#{createRideBean.destination}"></h:inputText>
+<td><h:inputText id="destination" value="#{createRideBean.destination}" required="true" /></td>
 </tr>
 
 <tr>
 <td>Date: </td>
-<h:inputText id="date" value="#{createRideBean.date}"></h:inputText>
+<td>
+    <!-- HTML5 date input bound to the bean's dateString property. -->
+    <h:inputText id="date" value="#{createRideBean.dateString}" required="true">
+        <f:passThroughAttribute name="type" value="date" />
+    </h:inputText>
+</td>
 </tr>
 
 <tr>
 <td>Seats: </td>
-<h:inputText id="seats" value="#{createRideBean.seats}"></h:inputText>
+<td>
+    <h:inputText id="seats" value="#{createRideBean.seats}" required="true">
+        <f:convertNumber integerOnly="true" />
+    </h:inputText>
+</td>
 </tr>
 
 <tr>
 <td>Price: </td>
-<h:inputText id="price" value="#{createRideBean.price}"></h:inputText>
+<td>
+    <h:inputText id="price" value="#{createRideBean.price}" required="true">
+        <f:convertNumber/>
+    </h:inputText>
+</td>
 </tr>
 
-<tr>
-<td>Mail: </td>
-<h:inputText id="mail" value="#{createRideBean.mail}"></h:inputText>
-</tr>
+</table>
 
 <p>
-<h:commandButton value="Create" action="#{login.create}" />
+<h:commandButton value="Create" action="#{createRideBean.create}" />
+<!-- Close button that navigates to index.xhtml without submitting the form -->
+<h:button value="Close" outcome="/index.xhtml" />
 </p>
 
 </h:form>
