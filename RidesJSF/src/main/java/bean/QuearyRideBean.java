@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 import jakarta.inject.Named;
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.context.SessionScoped; 
 
 import businessLogic.BLFacade;
 import domain.Ride;
