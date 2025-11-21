@@ -15,7 +15,9 @@ import domain.Ride;
 @SessionScoped
 public class QuearyRideBean implements Serializable {
     private String origin;
+    private List<String> originList;
     private String destination;
+    private List<String> destinationList;
     private Date date;
     private String dateString;
     private List<Ride> results = new ArrayList<>();
@@ -48,8 +50,16 @@ public class QuearyRideBean implements Serializable {
 
     // getters and setters
     public String getOrigin() { return origin; }
+    public List<String> getOriginList() { 
+    	this.originList = facade.getDepartCities();
+    	return this.originList; 
+    }
     public void setOrigin(String origin) { this.origin = origin; }
     public String getDestination() { return destination; }
+    public List<String> getDestinationList() {
+    	this.destinationList = facade.getDestinationCities(this.origin);
+    	return this.destinationList; 
+    }
     public void setDestination(String destination) { this.destination = destination; }
     public Date getDate() { return date; }
     public void setDate(Date date) { this.date = date; }
