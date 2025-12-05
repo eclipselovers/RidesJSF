@@ -60,11 +60,11 @@ public class BLFacadeImplementation  implements BLFacade {
 	/**
 	 * {@inheritDoc}
 	 */
-   public Ride createRide( String from, String to, Date date, int nPlaces, float price, String driverEmail ) throws RideMustBeLaterThanTodayException, RideAlreadyExistException{
-	   
-		Ride ride=dbManager.createRide(from, to, date, nPlaces, price, driverEmail);		
-		return ride;
-   };
+//   public Ride createRide( String from, String to, Date date, int nPlaces, float price, String driverEmail ) throws RideMustBeLaterThanTodayException, RideAlreadyExistException{
+//	   
+//		Ride ride=dbManager.createRide(from, to, date, nPlaces, price, driverEmail);		
+//		return ride;
+//   };
 	
    /**
     * {@inheritDoc}
@@ -99,6 +99,11 @@ public class BLFacadeImplementation  implements BLFacade {
 	 public void initializeBD(){
 		dbManager.initializeDB();
 	}
+	 
+	 public Ride createAndStoreRide(String origin, String destination, Date date, int seats, float price, String driverEmail) {
+		 Ride ride=dbManager.createAndStoreRide(origin, destination, date, seats, price, driverEmail);		
+		 return ride;
+	 }
 
 }
 

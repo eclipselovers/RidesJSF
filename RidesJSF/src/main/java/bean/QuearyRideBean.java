@@ -14,7 +14,8 @@ import domain.Ride;
 @Named("quearyRideBean")
 @SessionScoped
 public class QuearyRideBean implements Serializable {
-    private String origin;
+    private static final long serialVersionUID = 1L;
+	private String origin;
     private List<String> originList;
     private String destination;
     private List<String> destinationList;
@@ -29,7 +30,6 @@ public class QuearyRideBean implements Serializable {
     }
 
     public String search() {
-        // convert dateString to date
         if (dateString != null && !dateString.isEmpty()) {
             try {
                 date = HTML_DATE_FORMAT.parse(dateString);
@@ -45,10 +45,9 @@ public class QuearyRideBean implements Serializable {
         } catch (Exception e) {
             results = new ArrayList<>();
         }
-        return null; // stay on same page and show results
+        return null; 
     }
 
-    // getters and setters
     public String getOrigin() { return origin; }
     public List<String> getOriginList() { 
     	this.originList = facade.getDepartCities();

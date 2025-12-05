@@ -22,8 +22,8 @@ value="jdbc:mariadb://localhost:3306/ridesdb" />
  <!-- Hibernateko propietateak -->
  <property name="hibernate.dialect"
 value="org.hibernate.dialect.MariaDBDialect" />
- <property name="hibernate.hbm2ddl.auto" value="create" />
- <property name="hibernate.connection.autocommit" value="false" />
+<property name="hibernate.hbm2ddl.auto" value="update"/>
+<property name="hibernate.connection.autocommit" value="false" />
  <property name="hibernate.connection.pool_size" value="1" />
  <property name="hibernate.current_session_context_class"
 value="thread" />

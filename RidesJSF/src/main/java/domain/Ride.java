@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import eredua.JPAUtil;
+
 
 @SuppressWarnings("serial")
 @Entity
@@ -12,7 +14,9 @@ public class Ride implements Serializable {
 	@Id 
 	@GeneratedValue
 	private Integer rideNumber;
+	@Column(name = "origin")
 	private String from;
+	@Column(name = "destination")
 	private String to;
 	private int nPlaces;
 	private Date date;
@@ -177,8 +181,6 @@ public class Ride implements Serializable {
 	public String toString(){
 		return rideNumber+";"+";"+from+";"+to+";"+date;  
 	}
-
-
 
 
 	

@@ -135,34 +135,59 @@ public class HibernateDataAccess  {
 	 * @throws RideMustBeLaterThanTodayException if the ride date is before today 
  	 * @throws RideAlreadyExistException if the same ride already exists for the driver
 	 */
-	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws  RideAlreadyExistException, RideMustBeLaterThanTodayException {
-		System.out.println(">> DataAccess: createRide=> from= "+from+" to= "+to+" driver="+driverEmail+" date "+date);
-		try {
-			if(new Date().compareTo(date)>0) {
-				throw new RideMustBeLaterThanTodayException(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
-			}
-			db.getTransaction().begin();
-			
-			Driver driver = db.find(Driver.class, driverEmail);
-			if (driver.doesRideExists(from, to, date)) {
-				db.getTransaction().commit();
-				throw new RideAlreadyExistException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
-			}
-			System.out.println("crea addRide");
-			Ride ride = driver.addRide(from, to, date, nPlaces, price);
-			//next instruction can be obviated
-			db.persist(driver); 
-			db.getTransaction().commit();
+//	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws  RideAlreadyExistException, RideMustBeLaterThanTodayException {
+//		System.out.println(">> DataAccess: createRide=> from= "+from+" to= "+to+" driver="+driverEmail+" date "+date);
+//		try {
+//			if(new Date().compareTo(date)>0) {
+//				throw new RideMustBeLaterThanTodayException(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
+//			}
+//			db.getTransaction().begin();
+//			
+//			Driver driver = db.find(Driver.class, driverEmail);
+//			if (driver.doesRideExists(from, to, date)) {
+//				db.getTransaction().commit();
+//				throw new RideAlreadyExistException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
+//			}
+//			System.out.println("crea addRide");
+//			Ride ride = driver.addRide(from, to, date, nPlaces, price);
+//			//next instruction can be obviated
+//			db.persist(driver); 
+//			db.getTransaction().commit();
+//
+//			return ride;
+//		} catch (NullPointerException e) {
+//			// TODO Auto-generated catch block
+//			db.getTransaction().commit();
+//			return null;
+//		}
+//		
+//		
+//	}
+	
+	public Ride createAndStoreRide(String origin,String destination,Date Data, int seats, float price, String driverEmail) {
+		 EntityManager em = JPAUtil.getEntityManager();
+		 try {
+		 em.getTransaction().begin();
+		 Ride u = new Ride();
+		 u.setFrom(origin);
+		 u.setTo(destination);
+		 u.setDate(Data);
+		 u.setBetMinimum(seats);
+		 u.setPrice(price);
+		 em.persist(u);
+		 em.getTransaction().commit();
+		 return u;
+		 } catch (Exception e) {
+		 if (em.getTransaction().isActive()) {
+		 em.getTransaction().rollback();
+		 }
+		 throw e;
+		 } finally {
+		 em.close();
+		 }
+		 }
 
-			return ride;
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			db.getTransaction().commit();
-			return null;
-		}
-		
-		
-	}
+
 	
 	/**
 	 * This method retrieves the rides from two locations on a given date 

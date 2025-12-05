@@ -1,5 +1,8 @@
 package bean;
 import java.util.*;
+
+import javax.persistence.EntityManager;
+
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import jakarta.inject.Named;
@@ -7,6 +10,7 @@ import jakarta.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import businessLogic.BLFacade;
 import domain.Ride;
+import eredua.JPAUtil;
 import exceptions.RideAlreadyExistException;
 import exceptions.RideMustBeLaterThanTodayException;
 import jakarta.faces.application.FacesMessage;
@@ -16,6 +20,7 @@ import jakarta.faces.context.FacesContext;
 @Named("createRideBean")
 @SessionScoped
 public class CreateRideBean implements Serializable {
+private static final long serialVersionUID = 1L;
 private String origin;
 private String destination;
 private Date date;
@@ -24,12 +29,10 @@ private float price;
 private String mail;
 private List<String> cities;
 
-// New property to bind to an HTML date input (yyyy-MM-dd)
 private String dateString;
 
 private BLFacade facade = FacadeBean.getBusinessLogic();
 
-// Default driver email to use when user doesn't provide one
 private static final String DEFAULT_DRIVER_EMAIL = "driver1@gmail.com";
 
 private static final SimpleDateFormat HTML_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -40,38 +43,30 @@ cities = facade.getDepartCities();
 }
 
 
-public String create(){
-	// Ensure date is in sync with dateString before creating
+public String create() throws RideMustBeLaterThanTodayException, RideAlreadyExistException{
 	if (date == null && dateString != null && !dateString.isEmpty()) {
 		try {
 			date = HTML_DATE_FORMAT.parse(dateString);
 		} catch (ParseException e) {
-			// leave date as null - facade.createRide may validate
 		}
 	}
 	try {
-		// If user did not provide an email, use default driver email
 		String driverEmail = (mail == null || mail.trim().isEmpty()) ? DEFAULT_DRIVER_EMAIL : mail.trim();
-		Ride ride = facade.createRide(origin, destination, date, seats, price, driverEmail);
+		Ride ride = facade.createAndStoreRide(origin, destination, date, seats, price, driverEmail);
 		if (ride == null) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ride not created (driver may not exist)."));
 			return null;
 		}
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ride created", "Ride saved successfully."));
-		// reset form
 		origin = null; destination = null; date = null; dateString = null; seats = 0; price = 0f; mail = null;
-		return null; // stay on same page
-	} catch (RideMustBeLaterThanTodayException e) {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid date", e.getMessage()));
-		return null;
-	} catch (RideAlreadyExistException e) {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ride exists", e.getMessage()));
-		return null;
+		return null; 
 	} catch (Exception e) {
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
 		return null;
 	}
 }
+
+
 
 
 public String getOrigin(){return origin;}
@@ -88,7 +83,6 @@ public void setPrice(float p){price=p;}
 public String getMail(){return mail;}
 public void setMail(String m){mail=m;}
 
-// New getters/setters for the HTML date input
 public String getDateString() {
 	if (date != null) {
 		return HTML_DATE_FORMAT.format(date);
